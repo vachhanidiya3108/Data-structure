@@ -1,0 +1,254 @@
+#include <iostream>
+using namespace std;
+
+struct node
+{
+    int data;
+    node *next;
+};
+
+node *last = NULL;
+
+void insertBeginning(int x)
+{
+    node *temp = new node;
+    temp->data = x;
+
+    if(last == NULL)
+    {
+        last = temp;
+        temp->next = last;
+    }
+    else
+    {
+        temp->next = last->next;
+        last->next = temp;
+    }
+}
+
+void insertEnd(int x)
+{
+    node *temp = new node;
+    temp->data = x;
+
+    if(last == NULL)
+    {
+        last = temp;
+        temp->next = last;
+    }
+    else
+    {
+        temp->next = last->next;
+        last->next = temp;
+        last = temp;
+    }
+}
+
+void insertAfter(int key, int x)
+{
+    if(last == NULL)
+    {
+        cout << "List is empty\n";
+        return;
+    }
+
+    node *p = last->next;
+
+    do
+    {
+        if(p->data == key)
+        {
+            node *temp = new node;
+            temp->data = x;
+            temp->next = p->next;
+            p->next = temp;
+
+            if(p == last)
+                last = temp;
+
+            return;
+        }
+
+        p = p->next;
+    } while(p != last->next);
+
+    cout << "Node not found\n";
+}
+
+void deleteFirst()
+{
+    if(last == NULL)
+    {
+        cout << "List is empty\n";
+        return;
+    }
+
+    node *temp = last->next;
+
+    if(temp == last)
+    {
+        last = NULL;
+    }
+    else
+    {
+        last->next = temp->next;
+    }
+
+    delete temp;
+}
+
+void deleteLast()
+{
+    if(last == NULL)
+    {
+        cout << "List is empty\n";
+        return;
+    }
+
+    node *p = last->next;
+
+    if(p == last)
+    {
+        delete last;
+        last = NULL;
+        return;
+    }
+
+    while(p->next != last)
+    {
+        p = p->next;
+    }
+
+    p->next = last->next;
+    delete last;
+    last = p;
+}
+
+void deleteAfter(int key)
+{
+    if(last == NULL)
+    {
+        cout << "List is empty\n";
+        return;
+    }
+
+    node *p = last->next;
+
+    do
+    {
+        if(p->data == key)
+        {
+            node *temp = p->next;
+
+            if(temp == p)
+            {
+                last = NULL;
+            }
+            else
+            {
+                p->next = temp->next;
+
+                if(temp == last)
+                    last = p;
+            }
+
+            delete temp;
+            return;
+        }
+
+        p = p->next;
+    } while(p != last->next);
+
+    cout << "Node not found\n";
+}
+
+void display()
+{
+    if(last == NULL)
+    {
+        cout << "List is empty\n";
+        return;
+    }
+
+    node *p = last->next;
+
+    do
+    {
+        cout << p->data << " ";
+        p = p->next;
+    } while(p != last->next);
+
+    cout << endl;
+}
+
+int main()
+{
+    int choice, x, key;
+
+    do
+    {
+        cout << " Singly Circular Linked List \n";
+        cout << "1. Insert at Beginning\n";
+        cout << "2. Insert at End\n";
+        cout << "3. Insert After Given Node\n";
+        cout << "4. Delete First Node\n";
+        cout << "5. Delete Last Node\n";
+        cout << "6. Delete Node After Given Node\n";
+        cout << "7. Display\n";
+        cout << "8. Exit\n";
+
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch(choice)
+        {
+            case 1:
+                cout << "Enter value: ";
+                cin >> x;
+                insertBeginning(x);
+                break;
+
+            case 2:
+                cout << "Enter value: ";
+                cin >> x;
+                insertEnd(x);
+                break;
+
+            case 3:
+                cout << "Enter node after which to insert: ";
+                cin >> key;
+                cout << "Enter value: ";
+                cin >> x;
+                insertAfter(key, x);
+                break;
+
+            case 4:
+                deleteFirst();
+                break;
+
+            case 5:
+                deleteLast();
+                break;
+
+            case 6:
+                cout << "Enter node after which to delete: ";
+                cin >> key;
+                deleteAfter(key);
+                break;
+
+            case 7:
+                display();
+                break;
+
+            case 8:
+                cout << "Exiting...";
+                break;
+
+            default:
+                cout << "Invalid choice\n";
+        }
+
+    } while(choice != 8);
+
+    return 0;
+}
